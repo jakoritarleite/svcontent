@@ -1,11 +1,11 @@
-[programs.localnet]
-svcontent = "Fg6PaFpoGXkYsidMpWTK6W2BeZ7FEfcYkg476zPFsLnS"
+[programs.devnet]
+svcontent = "eY9Ed7FJAeKTRaHU6qYNnip14SMd7FUpHY32vHTB47D"
 
 [registry]
 url = "https://anchor.projectserum.com"
 
 [provider]
-cluster = "localnet"
+cluster = "devnet"
 wallet = "/home/koritar/.config/solana/id.json"
 
 [scripts]

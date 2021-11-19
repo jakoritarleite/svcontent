@@ -27,3 +27,26 @@ Archor is like Hardhat for Solana, and to install you can just run this:
 ```sh
 cargo install --git https://github.com/project-serum/anchor anchor-cli --locked
 ```
+
+# Deploy
+
+```
+solana config set --url devnet
+
+// Make sure you're on devnet.
+solana config get
+
+anchor build
+
+// Get the new program id.
+solana address -k target/deploy/myepicproject-keypair.json
+
+// Update Anchor.toml and lib.rs w/ new program id.
+// Make sure Anchor.toml is on devnet.
+
+// Build again.
+anchor build
+
+// Deploy
+anchor deploy
+```

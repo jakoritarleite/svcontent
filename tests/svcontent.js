@@ -22,8 +22,20 @@ const main = async () => {
     });
     console.log('Transaction signature is', tx);
 
-    const account = await program.account.baseAccount.fetch(baseAccount.publicKey);
+    let account = await program.account.baseAccount.fetch(baseAccount.publicKey);
     console.log('The GIF counting is', account.totalGifs.toString());
+
+    await program.rpc.addGif("insert_gif_link_here", {
+        accounts: {
+            baseAccount: baseAccount.publicKey,
+            user: provider.wallet.publicKey,
+        }
+    });
+
+    account = await program.account.baseAccount.fetch(baseAccount.publicKey);
+    console.log('The GIF counting is', account.totalGifs.toString());
+
+    console.log('The GIF list', account.gifList)
 }
 
 const run = async () => {
