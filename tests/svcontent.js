@@ -25,7 +25,7 @@ const main = async () => {
     let account = await program.account.baseAccount.fetch(baseAccount.publicKey);
     console.log('The GIF counting is', account.totalGifs.toString());
 
-    await program.rpc.addGif("insert_gif_link_here", {
+    await program.rpc.addGif("https://64.media.tumblr.com/03c78ec58da338fa128cb3e16cd5b4c2/tumblr_mzfa8lvm0l1qgrc4mo1_500.gif", {
         accounts: {
             baseAccount: baseAccount.publicKey,
             user: provider.wallet.publicKey,
@@ -35,7 +35,20 @@ const main = async () => {
     account = await program.account.baseAccount.fetch(baseAccount.publicKey);
     console.log('The GIF counting is', account.totalGifs.toString());
 
-    console.log('The GIF list', account.gifList)
+    console.log('The GIF list', account.gifList);
+
+    console.log('Upvoting');
+    await program.rpc.upvote("https://64.media.tumblr.com/03c78ec58da338fa128cb3e16cd5b4c2/tumblr_mzfa8lvm0l1qgrc4mo1_500.gif", {
+        accounts: {
+            baseAccount: baseAccount.publicKey,
+            user: provider.wallet.publicKey,
+        }
+    });
+
+    account = await program.account.baseAccount.fetch(baseAccount.publicKey);
+    console.log('The GIF counting is', account.totalGifs.toString());
+
+    console.log('The GIF list', account.gifList);
 }
 
 const run = async () => {

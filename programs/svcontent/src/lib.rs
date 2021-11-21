@@ -17,6 +17,7 @@ pub mod svcontent {
         let user = &mut ctx.accounts.user;
 
         let item = Item {
+            upvotes: vec![],
             gif_link: gif_link.to_string(),
             user_address: *user.to_account_info().key
         };
@@ -25,6 +26,27 @@ pub mod svcontent {
         base_account.total_gifs += 1;
 
         Ok(())
+    }
+
+    pub fn upvote(ctx: Context<UpvoteFn>, content_to_upvote: String) -> ProgramResult {
+        let gif_list = &mut ctx.accounts.base_account.gif_list;
+        let user = &mut ctx.accounts.user;
+
+        for content in &mut gif_list.iter_mut() {
+            if content.gif_link == content_to_upvote {
+                content.upvote(Upvote {
+                    user_address: *user.to_account_info().key
+                });
+            }
+        }
+
+        Ok(())
+    }
+}
+
+impl Item {
+    fn upvote(&mut self, new_upvote: Upvote) {
+        self.upvotes.push(new_upvote);
     }
 }
 
@@ -44,6 +66,13 @@ pub struct AddGif<'info> {
     pub user: Signer<'info>
 }
 
+#[derive(Accounts)]
+pub struct UpvoteFn<'info> {
+    #[account(mut)]
+    pub base_account: Account<'info, BaseAccount>,
+    pub user: Signer<'info>
+}
+
 #[account]
 pub struct BaseAccount {
     pub total_gifs: u64,
@@ -51,7 +80,13 @@ pub struct BaseAccount {
 }
 
 #[derive(Debug, Clone, AnchorSerialize, AnchorDeserialize)]
+pub struct Upvote {
+    pub user_address: Pubkey
+}
+
+#[derive(Debug, Clone, AnchorSerialize, AnchorDeserialize)]
 pub struct Item {
+    pub upvotes: Vec<Upvote>,
     pub gif_link: String,
     pub user_address: Pubkey
 }
